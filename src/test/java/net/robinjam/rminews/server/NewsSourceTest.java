@@ -31,5 +31,20 @@ public class NewsSourceTest {
 		source.registerSink(sink);
 		source.notifySinks(new NewsItem("Hello world!"));
 	}
+	
+	/**
+	 * Verifies that if a sink becomes unavailable, no exception is thrown by the source when notifySinks is called.
+	 */
+	@Test
+	public void testDisconnectedSinksDoNotCauseFailure() throws RemoteException {
+		NewsSource source = new NewsSource();
+		source.registerSink(new NotificationSink() {
+			@Override
+			public void notify(NotificationSource source, Notification notification) throws RemoteException {
+				throw new RemoteException();
+			}
+		});
+		source.notifySinks(new NewsItem("Hello world!"));
+	}
 
 }
