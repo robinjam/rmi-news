@@ -55,9 +55,10 @@ public class NewsSource extends UnicastRemoteObject implements NotificationSourc
 			Naming.rebind(args[0], source);
 			
 			// Send a test notification once per second
+			int count = 0;
 			while (true) {
 				System.out.println("Sending notification...");
-				source.notifySinks(new NewsItem("Hello world!"));
+				source.notifySinks(new NewsItem("Hello world! " + ++count));
 				Thread.sleep(1000);
 			}
 		} catch (Exception e) {
