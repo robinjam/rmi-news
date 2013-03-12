@@ -13,6 +13,8 @@ import org.junit.Test;
 
 public class NewsSourceTest {
 	
+	private final NewsItem dummyItem = new NewsItem("Headline", "Description", "http://www.google.com");
+	
 	/**
 	 * Verifies that if the same sink is registered to the same source multiple times, it only receives each unique notification once.
 	 */
@@ -29,7 +31,7 @@ public class NewsSourceTest {
 		};
 		source.registerSink(sink);
 		source.registerSink(sink);
-		source.notifySinks(new NewsItem("Hello world!"));
+		source.notifySinks(dummyItem);
 	}
 	
 	/**
@@ -44,7 +46,7 @@ public class NewsSourceTest {
 				throw new RemoteException();
 			}
 		});
-		source.notifySinks(new NewsItem("Hello world!"));
+		source.notifySinks(dummyItem);
 	}
 
 }

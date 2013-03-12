@@ -11,14 +11,24 @@ public class NewsItem implements Notification {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final String text;
+	private final String headline, description, url;
 	
-	public NewsItem(String text) {
-		this.text = text;
+	public NewsItem(String headline, String description, String url) {
+		this.headline = headline;
+		this.description = description;
+		this.url = url;
 	}
 
-	public String getText() {
-		return text;
+	public String getHeadline() {
+		return headline;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	public String getUrl() {
+		return url;
 	}
 	
 }

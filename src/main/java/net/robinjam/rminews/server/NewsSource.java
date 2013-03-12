@@ -58,7 +58,7 @@ public class NewsSource extends UnicastRemoteObject implements NotificationSourc
 			int count = 0;
 			while (true) {
 				System.out.println("Sending notification...");
-				source.notifySinks(new NewsItem("Hello world! " + ++count));
+				source.notifySinks(new NewsItem("Hello world! " + ++count, "This is some content", "http://www.google.com"));
 				Thread.sleep(1000);
 			}
 		} catch (Exception e) {

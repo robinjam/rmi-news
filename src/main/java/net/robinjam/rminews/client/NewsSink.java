@@ -27,7 +27,7 @@ public class NewsSink extends UnicastRemoteObject implements NotificationSink, L
 
 	@Override
 	public void notify(NotificationSource source, Notification notification) throws RemoteException {
-		messages.add(((NewsItem) notification).getText());
+		messages.add((NewsItem) notification);
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -39,7 +39,7 @@ public class NewsSink extends UnicastRemoteObject implements NotificationSink, L
 	}
 	
 	private Set<ListDataListener> listeners = new HashSet<ListDataListener>();
-	private List<String> messages = new ArrayList<String>();
+	private List<NewsItem> messages = new ArrayList<NewsItem>();
 
 	@Override
 	public void addListDataListener(ListDataListener listener) {
@@ -53,7 +53,8 @@ public class NewsSink extends UnicastRemoteObject implements NotificationSink, L
 
 	@Override
 	public Object getElementAt(int index) {
-		return messages.get(getSize() - index - 1);
+		NewsItem newsItem = messages.get(getSize() - index - 1);
+		return String.format("<html><h1>%s</h1><p>%s</p><p><em>%s</em></p></html>", newsItem.getHeadline(), newsItem.getDescription(), newsItem.getUrl());
 	}
 
 	@Override
