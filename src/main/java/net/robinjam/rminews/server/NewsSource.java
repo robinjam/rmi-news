@@ -3,9 +3,9 @@ package net.robinjam.rminews.server;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import net.robinjam.notifications.Notification;
 import net.robinjam.notifications.NotificationSink;
@@ -20,7 +20,7 @@ public class NewsSource extends UnicastRemoteObject implements NotificationSourc
 		super();
 	}
 
-	private Collection<NotificationSink> sinks = new ArrayList<NotificationSink>();
+	private Set<NotificationSink> sinks = new HashSet<NotificationSink>();
 
 	@Override
 	public void registerSink(NotificationSink sink) throws RemoteException {
