@@ -1,7 +1,6 @@
 package net.robinjam.rminews.client;
 
 import java.net.MalformedURLException;
-import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -9,6 +8,7 @@ import java.util.List;
 
 import javax.swing.AbstractListModel;
 
+import net.robinjam.notifications.ConcreteNotificationSource;
 import net.robinjam.notifications.NotificationSink;
 import net.robinjam.notifications.NotificationSource;
 
@@ -54,7 +54,7 @@ public class NewsSourceManager extends AbstractListModel {
 	 * @param url The URL for the feed the user wants to subscribe to.
 	 */
 	public void subscribe(String url) throws MalformedURLException, RemoteException, NotBoundException {
-		NotificationSource source = (NotificationSource) Naming.lookup(url);
+		NotificationSource source = ConcreteNotificationSource.getNotificationSource(url);
 		source.registerSink(sink);
 		items.add(new Item(url, source));
 		fireIntervalAdded(this, items.size() - 1, items.size() - 1);

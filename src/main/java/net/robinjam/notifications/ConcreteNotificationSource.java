@@ -1,5 +1,8 @@
 package net.robinjam.notifications;
 
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashSet;
@@ -8,13 +11,19 @@ import java.util.Set;
 
 public class ConcreteNotificationSource extends UnicastRemoteObject implements NotificationSource {
 
-	public ConcreteNotificationSource() throws RemoteException {
+	public ConcreteNotificationSource(String url) throws RemoteException, MalformedURLException {
 		super();
+		
+		Naming.rebind(url, this);
 	}
 
 	private static final long serialVersionUID = 1L;
 	
 	private Set<NotificationSink> sinks = new HashSet<NotificationSink>();
+	
+	public static NotificationSource getNotificationSource(String url) throws MalformedURLException, RemoteException, NotBoundException {
+		return (NotificationSource) Naming.lookup(url);
+	}
 
 	@Override
 	public void registerSink(NotificationSink sink) throws RemoteException {

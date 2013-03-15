@@ -6,7 +6,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
 
 import javax.swing.JButton;
@@ -20,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import net.robinjam.notifications.ConcreteNotificationSource;
+import net.robinjam.notifications.NotificationSource;
 import net.robinjam.rminews.NewsItem;
 
 @SuppressWarnings("serial")
@@ -28,8 +28,7 @@ public class MainWindow extends JFrame {
 	public MainWindow(String url) throws RemoteException, MalformedURLException {
 		super("RMI News Server");
 		
-		final ConcreteNotificationSource source = new ConcreteNotificationSource();
-		Naming.rebind(url, source);
+		final NotificationSource source = new ConcreteNotificationSource(url);
 		
 		final JTextField titleField = new JTextField(20);
 		final JTextField urlField = new JTextField(20);
