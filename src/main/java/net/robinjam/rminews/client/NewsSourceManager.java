@@ -9,8 +9,8 @@ import java.util.List;
 
 import javax.swing.AbstractListModel;
 
-import net.robinjam.notifications.INotificationSink;
-import net.robinjam.notifications.INotificationSource;
+import net.robinjam.notifications.NotificationSink;
+import net.robinjam.notifications.NotificationSource;
 
 /**
  * Manages the news sources that a given sink is subscribed to, and provides a JList model listing these subscriptions.
@@ -21,9 +21,9 @@ public class NewsSourceManager extends AbstractListModel {
 	
 	private static class Item {
 		private final String url;
-		private final INotificationSource source;
+		private final NotificationSource source;
 		
-		private Item(String url, INotificationSource source) {
+		private Item(String url, NotificationSource source) {
 			this.url = url;
 			this.source = source;
 		}
@@ -31,10 +31,10 @@ public class NewsSourceManager extends AbstractListModel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private INotificationSink sink;
+	private NotificationSink sink;
 	private List<Item> items = new ArrayList<Item>();
 	
-	public NewsSourceManager(INotificationSink sink) {
+	public NewsSourceManager(NotificationSink sink) {
 		this.sink = sink;
 	}
 
@@ -54,7 +54,7 @@ public class NewsSourceManager extends AbstractListModel {
 	 * @param url The URL for the feed the user wants to subscribe to.
 	 */
 	public void subscribe(String url) throws MalformedURLException, RemoteException, NotBoundException {
-		INotificationSource source = (INotificationSource) Naming.lookup(url);
+		NotificationSource source = (NotificationSource) Naming.lookup(url);
 		source.registerSink(sink);
 		items.add(new Item(url, source));
 		fireIntervalAdded(this, items.size() - 1, items.size() - 1);

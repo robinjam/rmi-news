@@ -19,7 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import net.robinjam.notifications.NotificationSource;
+import net.robinjam.notifications.ConcreteNotificationSource;
 import net.robinjam.rminews.NewsItem;
 
 @SuppressWarnings("serial")
@@ -28,7 +28,7 @@ public class MainWindow extends JFrame {
 	public MainWindow(String url) throws RemoteException, MalformedURLException {
 		super("RMI News Server");
 		
-		final NotificationSource source = new NotificationSource();
+		final ConcreteNotificationSource source = new ConcreteNotificationSource();
 		Naming.rebind(url, source);
 		
 		final JTextField titleField = new JTextField(20);

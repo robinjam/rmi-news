@@ -17,8 +17,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import net.robinjam.notifications.INotificationSink;
 import net.robinjam.notifications.NotificationSink;
+import net.robinjam.notifications.ConcreteNotificationSink;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
@@ -27,7 +27,7 @@ public class MainWindow extends JFrame {
 		super("RMI News Client");
 		
 		final NewsItemListModel newsItemListModel = new NewsItemListModel();
-		final INotificationSink sink = new NotificationSink(newsItemListModel);
+		final NotificationSink sink = new ConcreteNotificationSink(newsItemListModel);
 		final NewsSourceManager sourceManager = new NewsSourceManager(sink);
 		
 		JPanel contentPane = new JPanel(new BorderLayout());

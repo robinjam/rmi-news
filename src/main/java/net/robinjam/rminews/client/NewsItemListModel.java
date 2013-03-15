@@ -5,19 +5,19 @@ import java.util.List;
 
 import javax.swing.AbstractListModel;
 
-import net.robinjam.notifications.INotification;
-import net.robinjam.notifications.INotificationListener;
-import net.robinjam.notifications.INotificationSource;
+import net.robinjam.notifications.Notification;
+import net.robinjam.notifications.NotificationListener;
+import net.robinjam.notifications.NotificationSource;
 import net.robinjam.rminews.NewsItem;
 
-public class NewsItemListModel extends AbstractListModel implements INotificationListener {
+public class NewsItemListModel extends AbstractListModel implements NotificationListener {
 
 	private static final long serialVersionUID = 1L;
 	
 	private List<NewsItem> newsItems = new ArrayList<NewsItem>();
 
 	@Override
-	public void notificationReceived(INotificationSource source, INotification notification) {
+	public void notificationReceived(NotificationSource source, Notification notification) {
 		if (notification instanceof NewsItem) {
 			newsItems.add((NewsItem) notification);
 			fireIntervalAdded(this, 0, 0);

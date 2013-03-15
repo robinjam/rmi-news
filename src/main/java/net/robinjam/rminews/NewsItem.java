@@ -1,8 +1,8 @@
 package net.robinjam.rminews;
 
-import net.robinjam.notifications.INotification;
+import net.robinjam.notifications.Notification;
 
-public class NewsItem implements INotification {
+public class NewsItem implements Notification {
 
 	private static final long serialVersionUID = 1L;
 	

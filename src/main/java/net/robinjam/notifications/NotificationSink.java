@@ -1,23 +1,10 @@
 package net.robinjam.notifications;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 
-public class NotificationSink extends UnicastRemoteObject implements INotificationSink {
-
-	private static final long serialVersionUID = 1L;
+public interface NotificationSink extends Remote {
 	
-	private final INotificationListener listener;
-
-	public NotificationSink(INotificationListener listener) throws RemoteException {
-		super();
-		
-		this.listener = listener;
-	}
-
-	@Override
-	public void notify(INotificationSource source, INotification notification) throws RemoteException {
-		listener.notificationReceived(source, notification);
-	}
-
+	public void notify(NotificationSource source, Notification notification) throws RemoteException;
+	
 }
