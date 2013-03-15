@@ -26,7 +26,7 @@ public final class ConcreteNotificationSink extends UnicastRemoteObject implemen
 	}
 
 	@Override
-	public void notify(NotificationSource source, Notification notification) {
+	synchronized public void notify(NotificationSource source, Notification notification) {
 		// Forward the notification to the listener
 		listener.notificationReceived(source, notification);
 	}

@@ -24,7 +24,7 @@ public final class ConcreteNotificationSource extends UnicastRemoteObject implem
 	 * @param url The URL to look up.
 	 * @return The notification source.
 	 */
-	public static NotificationSource getNotificationSource(String url) throws MalformedURLException, RemoteException, NotBoundException {
+	synchronized public static NotificationSource getNotificationSource(String url) throws MalformedURLException, RemoteException, NotBoundException {
 		return (NotificationSource) Naming.lookup(url);
 	}
 	
@@ -43,17 +43,17 @@ public final class ConcreteNotificationSource extends UnicastRemoteObject implem
 	private Set<NotificationSink> sinks = new HashSet<NotificationSink>();
 
 	@Override
-	public void registerSink(NotificationSink sink) {
+	synchronized public void registerSink(NotificationSink sink) {
 		sinks.add(sink);
 	}
 	
 	@Override
-	public void unregisterSink(NotificationSink sink) {
+	synchronized public void unregisterSink(NotificationSink sink) {
 		sinks.remove(sink);
 	}
 
 	@Override
-	public void notifySinks(Notification notification) {
+	synchronized public void notifySinks(Notification notification) {
 		// Iterate over the notification sinks
 		Iterator<NotificationSink> iter = sinks.iterator();
 		while (iter.hasNext()) {
