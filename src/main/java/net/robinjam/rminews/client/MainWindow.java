@@ -54,7 +54,8 @@ public class MainWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					sourceManager.subscribe(feedUrlField.getText());
+					if (!sourceManager.contains(feedUrlField.getText()))
+						sourceManager.subscribe(feedUrlField.getText());
 					feedUrlField.setText("");
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, "Unable to add the feed. Please check that the URL is correct.");

@@ -80,5 +80,20 @@ public class NewsFeedManager extends AbstractListModel {
 			// If a remote exception is raised whilst trying to unsubscribe, assume the connection has been lost and do nothing.
 		}
 	}
+	
+	/**
+	 * Checks whether the given URL is present in the feed list.
+	 * 
+	 * @param url The URL to check.
+	 * @return true if the URL has already been added, false otherwise.
+	 */
+	public boolean contains(String url) {
+		for (Item item : items) {
+			if (item.url.equals(url))
+				return true;
+		}
+		
+		return false;
+	}
 
 }
