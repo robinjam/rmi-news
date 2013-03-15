@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
 
 import javax.swing.JButton;
@@ -17,8 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-
-import net.robinjam.notifications.NotificationSource;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
@@ -44,10 +41,8 @@ public class MainWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					NotificationSource source = (NotificationSource) Naming.lookup(feedUrlField.getText());
-					source.registerSink(sink);
+					sink.addSubscription(feedUrlField.getText());
 					feedUrlField.setText("");
-					JOptionPane.showMessageDialog(null, "Feed was successfully added!");
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, "Unable to add the feed. Please check that the URL is correct.");
 				}
@@ -55,6 +50,8 @@ public class MainWindow extends JFrame {
 		});
 		addFeedPanel.add(addButton);
 		contentPane.add(addFeedPanel, BorderLayout.SOUTH);
+		
+		contentPane.add(new JScrollPane(new JList(sink.getNewsSourceListModel())), BorderLayout.EAST);
 		
 		setContentPane(contentPane);
 		setResizable(false);
