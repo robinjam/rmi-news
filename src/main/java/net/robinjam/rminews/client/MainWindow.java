@@ -31,7 +31,7 @@ public class MainWindow extends JFrame {
 		JPanel contentPane = new JPanel(new BorderLayout());
 		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
-		JScrollPane scrollPane = new JScrollPane(new JList(sink));
+		JScrollPane scrollPane = new JScrollPane(new JList(sink.getNewsItemListModel()));
 		scrollPane.setPreferredSize(new Dimension(500, 400));
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		
