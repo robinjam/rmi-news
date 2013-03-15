@@ -13,11 +13,18 @@ public interface NotificationSource extends Remote {
 	
 	/**
 	 * Registers the given notification sink to receive notifications from this source.
-	 * It is not necessary to unregister the sink since this will be done automatically when the sink is no longer available.
+	 * Implementing classes are required to automatically unregister sinks when they become unavailable (for example, due to connection loss).
 	 * 
-	 * @param sink The notification source to register.
+	 * @param sink The notification sink to register.
 	 */
 	public void registerSink(NotificationSink sink) throws RemoteException;
+	
+	/**
+	 * Unregisters the given notification sink from this source.
+	 * 
+	 * @param sink The notification sink to remove.
+	 */
+	public void unregisterSink(NotificationSink sink) throws RemoteException;
 	
 	/**
 	 * Sends the given notification to all of the sinks registered with this notification source.

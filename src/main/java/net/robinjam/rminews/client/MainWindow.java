@@ -24,6 +24,7 @@ public class MainWindow extends JFrame {
 		super("RMI News Client");
 		
 		final NewsSink sink = new NewsSink();
+		final NewsSourceManager sourceManager = new NewsSourceManager(sink);
 		
 		JPanel contentPane = new JPanel(new BorderLayout());
 		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -41,7 +42,7 @@ public class MainWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					sink.addSubscription(feedUrlField.getText());
+					sourceManager.subscribe(feedUrlField.getText());
 					feedUrlField.setText("");
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, "Unable to add the feed. Please check that the URL is correct.");
@@ -49,9 +50,24 @@ public class MainWindow extends JFrame {
 			}
 		});
 		addFeedPanel.add(addButton);
+		
 		contentPane.add(addFeedPanel, BorderLayout.SOUTH);
 		
-		contentPane.add(new JScrollPane(new JList(sink.getNewsSourceListModel())), BorderLayout.EAST);
+		final JList sourceList = new JList(sourceManager);
+		contentPane.add(new JScrollPane(sourceList), BorderLayout.EAST);
+		
+		JButton removeButton = new JButton("Remove");
+		removeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					sourceManager.unsubscribe(sourceList.getSelectedIndex());
+				} catch (RemoteException ex) {
+					// If an exception occurred while unregistering from the source, assume the connection has been lost and do nothing
+				}
+			}
+		});
+		addFeedPanel.add(removeButton);
 		
 		setContentPane(contentPane);
 		setResizable(false);

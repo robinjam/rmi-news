@@ -24,6 +24,11 @@ public class NewsSource extends UnicastRemoteObject implements NotificationSourc
 	public void registerSink(NotificationSink sink) throws RemoteException {
 		sinks.add(sink);
 	}
+	
+	@Override
+	public void unregisterSink(NotificationSink sink) throws RemoteException {
+		sinks.remove(sink);
+	}
 
 	@Override
 	public void notifySinks(Notification notification) throws RemoteException {
