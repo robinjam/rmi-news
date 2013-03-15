@@ -13,11 +13,11 @@ import net.robinjam.notifications.NotificationSink;
 import net.robinjam.notifications.NotificationSource;
 
 /**
- * Manages the news sources that a given sink is subscribed to, and provides a JList model listing these subscriptions.
+ * Manages the news feeds that a given sink is subscribed to, and provides a JList model listing these subscriptions.
  * 
- * @author robinjam
+ * @author James Robinson
  */
-public class NewsSourceManager extends AbstractListModel {
+public class NewsFeedManager extends AbstractListModel {
 	
 	private static class Item {
 		private final String url;
@@ -34,7 +34,13 @@ public class NewsSourceManager extends AbstractListModel {
 	private NotificationSink sink;
 	private List<Item> items = new ArrayList<Item>();
 	
-	public NewsSourceManager(NotificationSink sink) {
+	/**
+	 * Wraps the given notification sink.
+	 * This instance will manage adding and removing subscriptions via the subscribe and unsubscribe methods.
+	 * 
+	 * @param sink The notification sink to manage.
+	 */
+	public NewsFeedManager(NotificationSink sink) {
 		this.sink = sink;
 	}
 
@@ -49,7 +55,7 @@ public class NewsSourceManager extends AbstractListModel {
 	}
 	
 	/**
-	 * Subscribes the NewsSink wrapped in this instance to the feed at the given URL, and adds the feed to the list managed by this instance.
+	 * Subscribes the NotificationSink wrapped in this instance to the feed at the given URL, and adds the feed to the list managed by this instance.
 	 * 
 	 * @param url The URL for the feed the user wants to subscribe to.
 	 */
@@ -61,14 +67,18 @@ public class NewsSourceManager extends AbstractListModel {
 	}
 	
 	/**
-	 * Unsubscribes the NewsSink wrapped in this instance from the feed at the given index, and removes the feed from the list managed by this instance.
+	 * Unsubscribes the NotificationSink wrapped in this instance from the feed at the given index, and removes the feed from the list managed by this instance.
 	 * 
 	 * @param id The index of the feed to be removed.
 	 */
-	public void unsubscribe(int id) throws RemoteException {
-		Item item = items.remove(id);
-		item.source.unregisterSink(sink);
-		fireIntervalRemoved(this, id, id);
+	public void unsubscribe(int id) {
+		try {
+			Item item = items.remove(id);
+			fireIntervalRemoved(this, id, id);
+			item.source.unregisterSink(sink);
+		} catch (RemoteException e) {
+			// If a remote exception is raised whilst trying to unsubscribe, assume the connection has been lost and do nothing.
+		}
 	}
 
 }

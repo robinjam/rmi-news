@@ -20,18 +20,26 @@ import javax.swing.border.EmptyBorder;
 import net.robinjam.notifications.NotificationSink;
 import net.robinjam.notifications.ConcreteNotificationSink;
 
-@SuppressWarnings("serial")
+/**
+ * The main window of the client application.
+ * 
+ * @author James Robinson
+ */
 public class MainWindow extends JFrame {
 	
+	private static final long serialVersionUID = 1L;
+
 	public MainWindow() throws RemoteException {
 		super("RMI News Client");
 		
+		// Set up the notification sink and the list models
 		final NewsItemListModel newsItemListModel = new NewsItemListModel();
 		final NotificationSink sink = new ConcreteNotificationSink(newsItemListModel);
-		final NewsSourceManager sourceManager = new NewsSourceManager(sink);
+		final NewsFeedManager sourceManager = new NewsFeedManager(sink);
 		
+		// Add the controls to the content pane
 		JPanel contentPane = new JPanel(new BorderLayout());
-		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10)); // Add 10px padding around the main content
 		
 		JScrollPane scrollPane = new JScrollPane(new JList(newsItemListModel));
 		scrollPane.setPreferredSize(new Dimension(500, 400));
@@ -64,11 +72,7 @@ public class MainWindow extends JFrame {
 		removeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					sourceManager.unsubscribe(sourceList.getSelectedIndex());
-				} catch (RemoteException ex) {
-					// If an exception occurred while unregistering from the source, assume the connection has been lost and do nothing
-				}
+				sourceManager.unsubscribe(sourceList.getSelectedIndex());
 			}
 		});
 		addFeedPanel.add(removeButton);
