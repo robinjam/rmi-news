@@ -1,16 +1,15 @@
 package net.robinjam.rminews.client;
 
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
 import javax.swing.ListModel;
 
-import net.robinjam.notifications.Notification;
+import net.robinjam.notifications.INotification;
+import net.robinjam.notifications.INotificationSource;
 import net.robinjam.notifications.NotificationSink;
-import net.robinjam.notifications.NotificationSource;
 import net.robinjam.rminews.NewsItem;
 
 /**
@@ -18,7 +17,7 @@ import net.robinjam.rminews.NewsItem;
  * 
  * @author robinjam
  */
-public class NewsSink extends UnicastRemoteObject implements NotificationSink {
+public class NewsSink extends NotificationSink {
 
 	private static final long serialVersionUID = 1L;
 
@@ -53,7 +52,7 @@ public class NewsSink extends UnicastRemoteObject implements NotificationSink {
 	private NewsItemListModel newsItemListModel = new NewsItemListModel();
 
 	@Override
-	public void notify(NotificationSource source, Notification notification) throws RemoteException {
+	public void notify(INotificationSource source, INotification notification) throws RemoteException {
 		newsItemListModel.addNewsItem((NewsItem) notification);
 	}
 	

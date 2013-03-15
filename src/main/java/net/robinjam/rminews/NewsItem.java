@@ -1,13 +1,8 @@
 package net.robinjam.rminews;
 
-import net.robinjam.notifications.Notification;
+import net.robinjam.notifications.INotification;
 
-/**
- * Represents a single item in a news feed.
- * 
- * @author robinjam
- */
-public class NewsItem implements Notification {
+public class NewsItem implements INotification {
 
 	private static final long serialVersionUID = 1L;
 	
