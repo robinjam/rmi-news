@@ -19,51 +19,64 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import net.robinjam.notifications.ConcreteNotificationSource;
-import net.robinjam.notifications.NotificationSource;
 import net.robinjam.rminews.NewsItem;
 
-@SuppressWarnings("serial")
+/**
+ * The main window of the server application.
+ * 
+ * @author robinjam
+ */
 public class MainWindow extends JFrame {
 	
+	private static final long serialVersionUID = 1L;
+
 	public MainWindow(String url) throws RemoteException, MalformedURLException {
 		super("RMI News Server");
 		
-		final NotificationSource source = new ConcreteNotificationSource(url);
+		// Create the notification source using the given URL
+		final ConcreteNotificationSource source = new ConcreteNotificationSource(url);
 		
+		// Set up the the title, URL and description fields
 		final JTextField titleField = new JTextField(20);
 		final JTextField urlField = new JTextField(20);
 		final JTextArea descriptionField = new JTextArea(20, 20);
+		
+		// Set up the submit button, send the notification when clicked
 		JButton submitButton = new JButton("Submit");
 		submitButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				NewsItem notification = new NewsItem(titleField.getText(), descriptionField.getText(), urlField.getText());
-				try {
-					source.notifySinks(notification);
-				} catch (RemoteException ex) {
-					ex.printStackTrace();
-					System.exit(1);
-				}
+				source.notifySinks(new NewsItem(titleField.getText(), descriptionField.getText(), urlField.getText()));
 			}
 		});
 		
+		// Add the elements to the content pane
 		JPanel contentPane = new JPanel(new GridBagLayout());
-		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10)); // Add 10px padding around the main content
+		
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(5, 5, 5, 5);
-		gbc.fill = GridBagConstraints.BOTH;
+		gbc.insets = new Insets(5, 5, 5, 5); // Add 5px padding between cells
+		gbc.anchor = GridBagConstraints.EAST; // Align the labels to the right
+		
 		contentPane.add(new JLabel("Title"), gbc);
+		
 		gbc.gridy = 1;
 		contentPane.add(new JLabel("URL"), gbc);
+		
 		gbc.gridy = 2;
 		contentPane.add(new JLabel("Description"), gbc);
+		
+		gbc.fill = GridBagConstraints.BOTH; // Expand the text fields to fill the available space
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		contentPane.add(titleField, gbc);
+		
 		gbc.gridy = 1;
 		contentPane.add(urlField, gbc);
+		
 		gbc.gridy = 2;
 		contentPane.add(new JScrollPane(descriptionField), gbc);
+		
 		gbc.gridy = 3;
 		contentPane.add(submitButton, gbc);
 		
@@ -73,8 +86,10 @@ public class MainWindow extends JFrame {
 	}
 	
 	public static void main(String[] args) {
+		// Request the bind URL from the user
 		String result = JOptionPane.showInputDialog(null, "Please specify a URL for the feed.\nPlease note that an RMI registry must already be running on the specified host.", "//localhost/my_feed");
-		if (result == null) return;
+		if (result == null)
+			return; // If the user clicks cancel, exit
 		
 		try {
 			JFrame mainWindow = new MainWindow(result);
