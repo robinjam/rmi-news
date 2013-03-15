@@ -72,7 +72,8 @@ public class MainWindow extends JFrame {
 		removeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				sourceManager.unsubscribe(sourceList.getSelectedIndex());
+				if (!sourceList.isSelectionEmpty())
+					sourceManager.unsubscribe(sourceList.getSelectedIndex());
 			}
 		});
 		addFeedPanel.add(removeButton);
