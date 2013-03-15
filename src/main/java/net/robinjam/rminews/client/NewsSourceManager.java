@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.swing.AbstractListModel;
 
+import net.robinjam.notifications.INotificationSink;
 import net.robinjam.notifications.INotificationSource;
 
 /**
@@ -30,10 +31,10 @@ public class NewsSourceManager extends AbstractListModel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private NewsSink sink;
+	private INotificationSink sink;
 	private List<Item> items = new ArrayList<Item>();
 	
-	public NewsSourceManager(NewsSink sink) {
+	public NewsSourceManager(INotificationSink sink) {
 		this.sink = sink;
 	}
 

@@ -17,19 +17,23 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import net.robinjam.notifications.INotificationSink;
+import net.robinjam.notifications.NotificationSink;
+
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
 	
 	public MainWindow() throws RemoteException {
 		super("RMI News Client");
 		
-		final NewsSink sink = new NewsSink();
+		final NewsItemListModel newsItemListModel = new NewsItemListModel();
+		final INotificationSink sink = new NotificationSink(newsItemListModel);
 		final NewsSourceManager sourceManager = new NewsSourceManager(sink);
 		
 		JPanel contentPane = new JPanel(new BorderLayout());
 		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
-		JScrollPane scrollPane = new JScrollPane(new JList(sink.getNewsItemListModel()));
+		JScrollPane scrollPane = new JScrollPane(new JList(newsItemListModel));
 		scrollPane.setPreferredSize(new Dimension(500, 400));
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		
