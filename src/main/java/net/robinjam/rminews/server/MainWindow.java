@@ -12,6 +12,7 @@ import java.rmi.RemoteException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -72,19 +73,16 @@ public class MainWindow extends JFrame {
 	}
 	
 	public static void main(String[] args) {
-		// Check that the correct number of arguments was passed
-		if (args.length != 1) {
-			System.out.println("Please provide the bind address as a command-line argument.");
-			return;
-		}
+		String result = JOptionPane.showInputDialog(null, "Please specify a URL for the feed.\nPlease note that an RMI registry must already be running on the specified host.", "//localhost/my_feed");
+		if (result == null) return;
 		
 		try {
-			JFrame mainWindow = new MainWindow(args[0]);
+			JFrame mainWindow = new MainWindow(result);
 			mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			mainWindow.setLocationRelativeTo(null); // Center the window on the screen
 			mainWindow.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Unable to start server.\nPlease ensure that an RMI registry is running on the specified host.");
 			System.exit(1);
 		}
 	}

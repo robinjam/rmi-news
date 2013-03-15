@@ -1,12 +1,21 @@
 package net.robinjam.rminews.client;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.Naming;
+import java.rmi.RemoteException;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import net.robinjam.notifications.NotificationSource;
@@ -14,14 +23,38 @@ import net.robinjam.notifications.NotificationSource;
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
 	
-	public MainWindow(NewsSink sink) {
+	public MainWindow() throws RemoteException {
 		super("RMI News Client");
 		
-		JPanel contentPane = new JPanel();
+		final NewsSink sink = new NewsSink();
+		
+		JPanel contentPane = new JPanel(new BorderLayout());
 		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+		
 		JScrollPane scrollPane = new JScrollPane(new JList(sink));
 		scrollPane.setPreferredSize(new Dimension(500, 400));
-		contentPane.add(scrollPane);
+		contentPane.add(scrollPane, BorderLayout.CENTER);
+		
+		JPanel addFeedPanel = new JPanel(new FlowLayout());
+		addFeedPanel.add(new JLabel("Add feed:"));
+		final JTextField feedUrlField = new JTextField("//localhost/my_feed");
+		addFeedPanel.add(feedUrlField);
+		JButton addButton = new JButton("Add");
+		addButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					NotificationSource source = (NotificationSource) Naming.lookup(feedUrlField.getText());
+					source.registerSink(sink);
+					feedUrlField.setText("");
+					JOptionPane.showMessageDialog(null, "Feed was successfully added!");
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Unable to add the feed. Please check that the URL is correct.");
+				}
+			}
+		});
+		addFeedPanel.add(addButton);
+		contentPane.add(addFeedPanel, BorderLayout.SOUTH);
 		
 		setContentPane(contentPane);
 		setResizable(false);
@@ -29,20 +62,8 @@ public class MainWindow extends JFrame {
 	}
 	
 	public static void main(String[] args) {
-		// Check that the correct number of arguments was passed
-		if (args.length < 1) {
-			System.out.println("Please provide a list of bind addresses as command-line arguments.");
-			return;
-		}
-		
 		try {
-			NewsSink sink = new NewsSink();
-			for (int i = 0; i < args.length; ++i) {
-				NotificationSource source = (NotificationSource) Naming.lookup(args[i]);
-				source.registerSink(sink);
-			}
-			
-			JFrame mainWindow = new MainWindow(sink);
+			JFrame mainWindow = new MainWindow();
 			mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			mainWindow.setLocationRelativeTo(null);
 			mainWindow.setVisible(true);
