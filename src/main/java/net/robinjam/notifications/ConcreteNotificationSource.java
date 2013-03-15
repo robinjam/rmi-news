@@ -9,34 +9,51 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class ConcreteNotificationSource extends UnicastRemoteObject implements NotificationSource {
+/**
+ * Concrete implementation of {@link NotificationSource}.
+ * 
+ * @author James Robinson
+ */
+public final class ConcreteNotificationSource extends UnicastRemoteObject implements NotificationSource {
 
+	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Looks up the given bound URL and returns the matching notification source.
+	 * 
+	 * @param url The URL to look up.
+	 * @return The notification source.
+	 */
+	public static NotificationSource getNotificationSource(String url) throws MalformedURLException, RemoteException, NotBoundException {
+		return (NotificationSource) Naming.lookup(url);
+	}
+	
+	/**
+	 * Creates a new notification source and binds it to the given RMI URL.
+	 * If the given URL is already bound, the old binding will be overwritten.
+	 * 
+	 * @param url The RMI URL this source should bind to.
+	 */
 	public ConcreteNotificationSource(String url) throws RemoteException, MalformedURLException {
 		super();
 		
 		Naming.rebind(url, this);
 	}
-
-	private static final long serialVersionUID = 1L;
 	
 	private Set<NotificationSink> sinks = new HashSet<NotificationSink>();
-	
-	public static NotificationSource getNotificationSource(String url) throws MalformedURLException, RemoteException, NotBoundException {
-		return (NotificationSource) Naming.lookup(url);
-	}
 
 	@Override
-	public void registerSink(NotificationSink sink) throws RemoteException {
+	public void registerSink(NotificationSink sink) {
 		sinks.add(sink);
 	}
 	
 	@Override
-	public void unregisterSink(NotificationSink sink) throws RemoteException {
+	public void unregisterSink(NotificationSink sink) {
 		sinks.remove(sink);
 	}
 
 	@Override
-	public void notifySinks(Notification notification) throws RemoteException {
+	public void notifySinks(Notification notification) {
 		// Iterate over the notification sinks
 		Iterator<NotificationSink> iter = sinks.iterator();
 		while (iter.hasNext()) {
