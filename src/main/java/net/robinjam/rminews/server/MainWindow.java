@@ -24,7 +24,7 @@ import net.robinjam.rminews.NewsItem;
 /**
  * The main window of the server application.
  * 
- * @author robinjam
+ * @author James Robinson
  */
 public class MainWindow extends JFrame {
 	
